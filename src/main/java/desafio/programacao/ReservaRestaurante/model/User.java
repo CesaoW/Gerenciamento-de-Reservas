@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 @Entity(name = "User")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name")

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Entity(name = "Reservation")
 public class Reservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
@@ -23,4 +23,8 @@ public class Reservation {
 
     @Column(length = 50)
     private String status;
+
+    //Criando o construtor
+    public Reservation() {};
+
 }
