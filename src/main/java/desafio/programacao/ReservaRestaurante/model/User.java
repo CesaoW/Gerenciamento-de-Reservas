@@ -23,9 +23,27 @@ public class User {
     @NotBlank(message =" A senha não deve estar em branco.")
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
     @Column(name = "password_hash")
-    private String passwordHash;
+    private String password;
 
-    @Column(name = "role", length = 50)
-    private String role;
+    public enum TableRole{
+        ADMINISTRADOR, CLIENTE;
+    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", length = 20)
+    private TableRole role;
+
+    //construtores
+    public User(){}
+    public User(String name, String email,TableRole role,String password){
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.password = password;
+    }
+
+
+
+
 }
+
 

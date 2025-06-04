@@ -21,10 +21,47 @@ public class Reservation {
     @Column(nullable = false) // uma reserva deve ter data e hora
     private LocalDateTime dateTime;
 
-    @Column(length = 50)
-    private String status;
+    public enum Status{
+        ATIVO, CANCELADO;
+    }
+    @Column(length = 20)
+    private Status status;
 
-    //Criando o construtor
+    //Criando os construtores
     public Reservation() {};
+    public Reservation(RestaurantTable table, User user, LocalDateTime dateTime, Status status){
+        this.user = user;
+        this.table = table;
+        this.dateTime = dateTime;
+        this.status = status;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setTable(RestaurantTable table) {
+        this.table = table;
+    }
+
+    public RestaurantTable getTable() {
+        return table;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
+
