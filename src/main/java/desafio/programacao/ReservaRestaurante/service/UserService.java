@@ -1,5 +1,7 @@
 package desafio.programacao.ReservaRestaurante.service;
 
+import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserRegisterDTO;
+import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserResponseDTO;
 import desafio.programacao.ReservaRestaurante.model.User;
 import desafio.programacao.ReservaRestaurante.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,30 +20,54 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    public User RegisterUser(String name, String password, User.UserRole role, String email){
-        String criptedPassword = passwordEncoder.encode(password);
-        User user = new User(name, criptedPassword, role, email);
-        return userRepository.save(user);
+    public UserResponseDTO RegisterUser(UserRegisterDTO userRegisterDTO) {
+        User.UserRole role;
+        try {
+            role = User.UserRole.valueOf(userRegisterDTO.getRole().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Função do usuário inválido " + userRegisterDTO.getRole());
+        }
+        String hassedPassword = passwordEncoder.encode(userRegisterDTO.getPassword());
+
+        //criando o entity user a partir do DTO e da senha hashed
+        User newUserEntity = new User(userRegisterDTO.getName(), hassedPassword, role, userRegisterDTO.getEmail());
+
+        User savedUser = userRepository.save(newUserEntity);
+
+        return new UserResponseDTO(savedUser);
     }
 
-    public Optional<User> findByName(String name){
+    public Optional<UserResponseDTO> User(String email, String rawPassword) {
+        Optional<User> userOptional = userRepository.findByEmail(email); // Repositório retorna User (entidade)
+
+        if (userOptional.isPresent()) {
+            User userEntity = userOptional.get();
+            if (passwordEncoder.matches(rawPassword, userEntity.getPassword())) {
+                // Autenticado com sucesso, retorna DTO de resposta
+                return Optional.of(new UserResponseDTO(userEntity));
+            }
+        }
+        return Optional.empty(); // Credenciais inválidas ou usuário não encontrado
+    }
+
+    public Optional<UserRegisterDTO> findByName(String name){
         return userRepository.findByName(name);
     }
 
-    public Optional<User> findByRole(User.UserRole role){
+    public Optional<UserRegisterDTO> findByRole(UserRegisterDTO role){
         return userRepository.findByRole(role);
     }
 
-    public Optional<User> findByEmail(String email){
+    public Optional<UserRegisterDTO> findByEmail(String email){
        return userRepository.findByEmail(email);
     }
 
     public boolean authenticate(String email, String rawPassword) {
         // 1. Encontrar o usuário pelo email
-        Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<UserRegisterDTO> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isPresent()) {
-            User user = userOptional.get();
+            UserRegisterDTO user = userOptional.get();
             return passwordEncoder.matches(rawPassword, user.getPassword());
         }
         return false; // Usuário não encontrado ou credenciais inválidas

@@ -1,6 +1,6 @@
 package desafio.programacao.ReservaRestaurante.controller;
 
-import desafio.programacao.ReservaRestaurante.model.User;
+import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserRegisterDTO;
 import desafio.programacao.ReservaRestaurante.security.JwtUtil;
 import desafio.programacao.ReservaRestaurante.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,6 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
 
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -35,15 +34,15 @@ public class UserController {
             return ResponseEntity.badRequest().body("Todos os campos (name, password, email, role) são obrigatórios.");
         }
 
-        User.UserRole role;
+        UserRegisterDTO role;
         try {
-            role = User.UserRole.valueOf(roleString.toUpperCase()); // Converta para maiúsculas para corresponder ao enum
+            role = UserRegisterDTO.valueOf(roleString.toUpperCase()); // Converta para maiúsculas para corresponder ao enum
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Role inválido. Use ADMINISTRADOR ou CLIENTE.");
         }
 
         try {
-            User newUser = userService.RegisterUser(name, password, role, email);
+            UserRegisterDTO newUser = userService.RegisterUser(name, password, UserRegisterDTO role, email);
             return ResponseEntity.status(HttpStatus.CREATED).body(newUser); // Retorna 201 Created com o usuário criado
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao registrar usuário: " + e.getMessage());
@@ -63,9 +62,9 @@ public class UserController {
 
         if (isAuthenticated) {
             // Se a autenticação foi bem-sucedida, encontre o usuário para obter detalhes
-            Optional<User> userOptional = userService.findByEmail(email);
+            Optional<UserRegisterDTO> userOptional = userService.findByEmail(email);
             if (userOptional.isPresent()) {
-                User user = userOptional.get();
+                UserRegisterDTO user = userOptional.get();
                 String token = JwtUtil.generateToken(user.getEmail());
 
                 return ResponseEntity.ok(Map.of("message", "Login bem-sucedido", "token", token, "role", user.getRole().name()));
