@@ -31,4 +31,4 @@ public class UserResponseDTO {
     public void setEmail(String email) { this.email = email; }
     public void setRole(User.UserRole role) { this.role = role; }
 }
-}
+

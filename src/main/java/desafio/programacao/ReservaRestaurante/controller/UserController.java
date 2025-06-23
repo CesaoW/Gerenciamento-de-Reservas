@@ -1,8 +1,11 @@
 package desafio.programacao.ReservaRestaurante.controller;
 
+import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserLoginDTO;
 import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserRegisterDTO;
+import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserResponseDTO;
 import desafio.programacao.ReservaRestaurante.security.JwtUtil;
 import desafio.programacao.ReservaRestaurante.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 public class UserController {
     private final UserService userService;
 
@@ -22,56 +25,30 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
-        // Validação campos existentes
-        String name = request.get("name");
-        String password = request.get("password");
-        String email = request.get("email");
-        String roleString = request.get("role");
-
-        if (name == null || password == null || email == null || roleString == null) {
-            return ResponseEntity.badRequest().body("Todos os campos (name, password, email, role) são obrigatórios.");
-        }
-
-        UserRegisterDTO role;
+    @PostMapping("/registro")
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRegisterDTO registerDTO) {
         try {
-            role = UserRegisterDTO.valueOf(roleString.toUpperCase()); // Converta para maiúsculas para corresponder ao enum
+            UserResponseDTO newUser = userService.registerUser(registerDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newUser); // me retorna 201, com usuario criado
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Role inválido. Use ADMINISTRADOR ou CLIENTE.");
+            return ResponseEntity.badRequest().body(null);// captura roles invalidas, lançadas pelo Service
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        try {
-            UserRegisterDTO newUser = userService.RegisterUser(name, password, UserRegisterDTO role, email);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUser); // Retorna 201 Created com o usuário criado
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao registrar usuário: " + e.getMessage());
-        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        String password = request.get("password");
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO loginDTO) {
+        Optional<UserResponseDTO> userOptional = userService.authenticate(loginDTO.getEmail(), loginDTO.getPassword());
 
-        if (email == null || password == null) {
-            return ResponseEntity.badRequest().body("Email e senha são obrigatórios.");
-        }
+        if (userOptional.isPresent()) {
+            UserResponseDTO user = userOptional.get();
+            String token = JwtUtil.generateToken(user.getEmail());
 
-       boolean isAuthenticated = userService.authenticate(email, password);
-
-        if (isAuthenticated) {
-            // Se a autenticação foi bem-sucedida, encontre o usuário para obter detalhes
-            Optional<UserRegisterDTO> userOptional = userService.findByEmail(email);
-            if (userOptional.isPresent()) {
-                UserRegisterDTO user = userOptional.get();
-                String token = JwtUtil.generateToken(user.getEmail());
-
-                return ResponseEntity.ok(Map.of("message", "Login bem-sucedido", "token", token, "role", user.getRole().name()));
-            }
+            return ResponseEntity.ok(Map.of("message", "Login bem-sucedido", "token", token, "role", user.getRole().name()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas.");
-
     }
 
 }

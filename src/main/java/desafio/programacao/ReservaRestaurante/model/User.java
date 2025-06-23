@@ -29,6 +29,7 @@ public class User {
 
     @NotBlank(message =" A senha não deve estar em branco.")
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
+    @Column(nullable = false, length = 255)
     private String password;
 
 
