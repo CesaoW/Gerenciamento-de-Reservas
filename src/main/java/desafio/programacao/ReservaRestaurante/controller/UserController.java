@@ -45,7 +45,6 @@ public class UserController {
         if (userOptional.isPresent()) {
             UserResponseDTO user = userOptional.get();
             String token = JwtUtil.generateToken(user.getEmail());
-
             return ResponseEntity.ok(Map.of("message", "Login bem-sucedido", "token", token, "role", user.getRole().name()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas.");

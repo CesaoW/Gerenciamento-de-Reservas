@@ -12,7 +12,7 @@ public class RestaurantTable {
     private long id;
 
     @Column(name = "table_number", unique = true, nullable = false)
-    private long tableNumber;
+    private int tableNumber;
 
     @Column(nullable = false)
     private int capacity;
@@ -28,17 +28,19 @@ public class RestaurantTable {
 
     // construtores
     public RestaurantTable() {};
-    public RestaurantTable(long tableNumber, int capacity){
+    public RestaurantTable(int tableNumber, int capacity){
         this.tableNumber = tableNumber;
         this.capacity = capacity;
         this.status = TableStatus.DISPONIVEL;
     }
 
     // Criando os getters e setters
-    public void setTableNumber(long tableNumber) {
+
+    public long getTableId() {return id;}
+    public void setTableNumber(int tableNumber) {
         this.tableNumber = tableNumber;
     }
-    public long getTableNumber() {
+    public int getTableNumber() {
         return tableNumber;
     }
 

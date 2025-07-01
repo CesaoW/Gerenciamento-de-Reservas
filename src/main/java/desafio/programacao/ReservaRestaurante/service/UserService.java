@@ -4,8 +4,6 @@ import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserRegisterDTO;
 import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserResponseDTO;
 import desafio.programacao.ReservaRestaurante.model.User;
 import desafio.programacao.ReservaRestaurante.repository.UserRepository;
-import org.hibernate.dialect.lock.OptimisticForceIncrementLockingStrategy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
