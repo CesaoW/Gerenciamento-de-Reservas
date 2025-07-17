@@ -2,8 +2,6 @@ package desafio.programacao.ReservaRestaurante.model;
 
 import jakarta.persistence.*;
 
-import javax.swing.text.TabableView;
-
 @Table(name = "restaurant_tables")
 @Entity(name = "RestaurantTable")
 public class RestaurantTable {
@@ -12,11 +10,10 @@ public class RestaurantTable {
     private long id;
 
     @Column(name = "table_number", unique = true, nullable = false)
-    private int tableNumber;
+    private Integer tableNumber;
 
     @Column(nullable = false)
-    private int capacity;
-
+    private Integer capacity;
 
     public enum TableStatus{
         DISPONIVEL, RESERVADA, INATIVA
@@ -27,34 +24,35 @@ public class RestaurantTable {
     private TableStatus status;
 
     // construtores
-    public RestaurantTable() {};
-    public RestaurantTable(int tableNumber, int capacity){
+    public RestaurantTable(Integer tableNumber, Integer capacity, TableStatus status) {
         this.tableNumber = tableNumber;
         this.capacity = capacity;
-        this.status = TableStatus.DISPONIVEL;
-    }
+        this.status = status;
+    };
 
-    // Criando os getters e setters
+    public RestaurantTable() {}
 
+    //Getters
     public long getTableId() {return id;}
-    public void setTableNumber(int tableNumber) {
-        this.tableNumber = tableNumber;
-    }
-    public int getTableNumber() {
+    public Integer getTableNumber() {
         return tableNumber;
     }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
-    }
-
-    public void setStatus(TableStatus status) {
-        this.status = status;
     }
     public TableStatus getStatus() {
         return status;
     }
+
+    //Setters
+    public void setTableNumber(Integer tableNumber) {
+        this.tableNumber = tableNumber;
+    }
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+    public void setStatus(TableStatus status) {
+        this.status = status;
+    }
+
 }

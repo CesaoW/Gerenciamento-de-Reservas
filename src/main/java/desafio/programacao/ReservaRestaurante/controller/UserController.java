@@ -17,12 +17,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/registro")
@@ -44,7 +46,7 @@ public class UserController {
 
         if (userOptional.isPresent()) {
             UserResponseDTO user = userOptional.get();
-            String token = JwtUtil.generateToken(user.getEmail());
+            String token = jwtUtil.generateToken(user.getEmail());
             return ResponseEntity.ok(Map.of("message", "Login bem-sucedido", "token", token, "role", user.getRole().name()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas.");

@@ -18,6 +18,9 @@ public class Reservation {
     @JoinColumn(name = "table_id", nullable = false)
     private RestaurantTable table;
 
+    @Column(name ="num_guests")
+    private Integer numGuests;
+
     @Column(nullable = false) // uma reserva deve ter data e hora
     private LocalDateTime dateTime;
 
@@ -29,37 +32,34 @@ public class Reservation {
 
     //Criando os construtores
     public Reservation() {};
-    public Reservation(RestaurantTable table, User user, LocalDateTime dateTime, Status status){
+    public Reservation(RestaurantTable table, User user, Integer numGuests, LocalDateTime dateTime, Status status){
         this.user = user;
         this.table = table;
+        this.numGuests = numGuests; //implementar os dtos
         this.dateTime = dateTime;
         this.status = status;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
+    //getters
     public User getUser() {
         return user;
     }
-
-    public void setTable(RestaurantTable table) {
-        this.table = table;
-    }
-
     public RestaurantTable getTable() {
         return table;
     }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
+    public Integer getNumGuests() {return numGuests;}
     public LocalDateTime getDateTime() {
         return dateTime;
     }
 
+    //setters
+    public void setUser(User user) {this.user = user;}
+    public void setTable(RestaurantTable table) {
+        this.table = table;
+    }
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
     public void setStatus(Status status) {
         this.status = status;
     }

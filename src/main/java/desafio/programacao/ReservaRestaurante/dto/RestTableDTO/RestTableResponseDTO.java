@@ -3,9 +3,9 @@ package desafio.programacao.ReservaRestaurante.dto.RestTableDTO;
 import desafio.programacao.ReservaRestaurante.model.RestaurantTable;
 
 public class RestTableResponseDTO {
-    private long id;
-    private long tableNumber;
-    private int capacity;
+    private Long id;
+    private Integer tableNumber;
+    private Integer capacity;
     private RestaurantTable.TableStatus status;
 
     // construtores
@@ -18,13 +18,15 @@ public class RestTableResponseDTO {
     }
 
     //Getters
-    public long getTableNumber() {return tableNumber;}
-    public int getCapacity() {return capacity;}
+
+    public Long getId() {return id;}
+    public Integer getTableNumber() {return tableNumber;}
+    public Integer getCapacity() {return capacity;}
     public RestaurantTable.TableStatus getStatus() {return status;}
 
     //Setters
-    public void setCapacity(int capacity) {this.capacity = capacity;}
-    public void setTableNumber(long tableNumber) {this.tableNumber = tableNumber;}
+    public void setCapacity(Integer capacity) {this.capacity = capacity;}
+    public void setTableNumber(Integer tableNumber) {this.tableNumber = tableNumber;}
     public void setStatus(RestaurantTable.TableStatus status) {this.status = status;}
 
 }
