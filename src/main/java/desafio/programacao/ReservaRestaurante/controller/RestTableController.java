@@ -47,11 +47,7 @@ public class RestTableController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteByID(@PathVariable Long id){
-        try{
-            tableService.deleteTable(id);
-            return ResponseEntity.noContent().build();
-        }catch (EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        tableService.deleteTable(id);
+        return ResponseEntity.noContent().build();
     }
 }

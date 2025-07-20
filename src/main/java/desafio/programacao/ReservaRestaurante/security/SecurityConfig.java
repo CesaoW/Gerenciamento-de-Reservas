@@ -42,7 +42,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/mesas/**").hasRole("ADMINISTRADOR")
                         .requestMatchers(HttpMethod.DELETE, "/mesas/**").hasRole("ADMINISTRADOR")
 
-                        .requestMatchers("/reservas/**").hasAnyRole("CLIENTE", "ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.POST,"/reservas").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reservas").permitAll()
+                        .requestMatchers(HttpMethod.PATCH,"/reservas/cancel").permitAll()
+
 
                         .anyRequest().authenticated()
                 )

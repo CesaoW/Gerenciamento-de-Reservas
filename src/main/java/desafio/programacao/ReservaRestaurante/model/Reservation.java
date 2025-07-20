@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Table(name = "reservation")
 @Entity(name = "Reservation")
-public class Reservation {
+public abstract class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -35,22 +35,26 @@ public class Reservation {
     public Reservation(RestaurantTable table, User user, Integer numGuests, LocalDateTime dateTime, Status status){
         this.user = user;
         this.table = table;
-        this.numGuests = numGuests; //implementar os dtos
+        this.numGuests = numGuests;
         this.dateTime = dateTime;
         this.status = status;
     }
 
+    //Metodos da Reserva
+    public abstract String getType();
+    public abstract double calculateDiscount();
+
     //getters
+
+    public long getId() {return id;}
     public User getUser() {
         return user;
     }
-    public RestaurantTable getTable() {
-        return table;
-    }
+    public RestaurantTable getTable() {return table;}
     public Integer getNumGuests() {return numGuests;}
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
+    public LocalDateTime getDateTime() {return dateTime;}
+
+    public Status getStatus(){return status;}
 
     //setters
     public void setUser(User user) {this.user = user;}

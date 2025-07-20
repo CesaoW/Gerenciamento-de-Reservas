@@ -69,7 +69,7 @@ public class RestTableService {
         if(!tableRepository.existsById(id)){
             throw new EntityNotFoundException("Mesa nao encontrada com ID:"+id);
         }
-        tableRepository.findById(id);
+        tableRepository.deleteById(id);
     }
 
 }
