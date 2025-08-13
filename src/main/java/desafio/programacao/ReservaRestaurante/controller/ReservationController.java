@@ -35,6 +35,16 @@ public class ReservationController {
         List<ReservationResponseDTO> allReservations = reservationService.getAllReservations();
         return ResponseEntity.ok(allReservations);
     }
+    @DeleteMapping("/{name}")
+    public ResponseEntity<String> deleteByName(@PathVariable String name){
+        try{
+            reservationService.deleteReservationByName(name);
+            return ResponseEntity.ok("Reserva de "+name+" deletada com sucesso.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reserva de "+name+" não encontrada.");
+        }
+    }
+
 
     @PatchMapping("/cancel")
     public ResponseEntity<ReservationResponseDTO> cancelReservation(@RequestBody ReservationCancelDTO calcelDTO) {

@@ -104,5 +104,26 @@ public class ReservationService {
         return new ReservationResponseDTO(cancelledReservation);
     }
 
+    @Transactional
+    public void deleteReservationByName(String userName) {
+        // Buscar pelo nome do usuário
+        User user = userRepository.findByName(userName)
+                .orElseThrow(() -> new RuntimeException("Usuário '" + userName + "' não encontrado."));
 
+        // Buscar reserva ativa do usuário
+        Optional<Reservation> reservation = reservationRepository.findByUserAndStatus(user, Reservation.Status.ATIVO);
+
+        if (reservation.isEmpty()) {
+            throw new RuntimeException("Nenhuma reserva ativa encontrada para o usuário: " + userName);
+        }
+
+        Reservation reservationToDelete = reservation.get();
+
+        RestaurantTable table = reservationToDelete.getTable();
+        if (table != null) {
+            table.setStatus(RestaurantTable.TableStatus.DISPONIVEL);
+            tableRepository.save(table);
+        }
+        reservationRepository.delete(reservationToDelete);
+    }
 }
