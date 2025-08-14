@@ -1,7 +1,7 @@
 # 🍽️ Reserva de Restaurantes
 ## 📖 Sobre o Projeto
 
-**Reserva De Restaurantes** é uma API REST robusta desenvolvida em **Spring Boot** para gerenciamento completo de reservas em restaurantes. O sistema oferece controle de mesas, usuários, autenticação JWT e operações CRUD completas para reservas.
+**Reservas De Restaurantes** é uma API REST robusta desenvolvida em **Spring Boot** para gerenciamento completo de reservas em restaurantes. O sistema oferece controle de mesas, usuários, autenticação JWT e operações CRUD completas para reservas.
 
 <div align="center">
 
