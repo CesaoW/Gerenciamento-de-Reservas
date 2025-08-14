@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/reservas").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reservas").permitAll()
                         .requestMatchers(HttpMethod.PATCH,"/reservas/cancel").permitAll()
-
+                        .requestMatchers(HttpMethod.DELETE,"/reservas/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
