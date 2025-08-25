@@ -15,26 +15,26 @@
 ---
 
 
-### ✨ Funcionalidades Principais
+### Principais funcionalidades
 
-- 🔐 **Autenticação JWT** com controle de roles (ADMINISTRADOR/CLIENTE)
-- 📅 **Sistema de Reservas Completo**
+- **Autenticação JWT** com controle de roles (ADMINISTRADOR/CLIENTE)
+- **Sistema de Reservas Completo**
     - Criar reservas (tipos SIMPLE e EXECUTIVE)
     - Listar todas as reservas
-    - Cancelar reservas (soft delete)
+    - Cancelar reservas 
     - Deletar reservas por nome do usuário
-- 🪑 **Gerenciamento de Mesas**
+- **Gerenciamento de Mesas**
     - Controle automático de status (DISPONÍVEL/RESERVADA)
     - Validação de capacidade
     - Operações CRUD completas
-- 🏛️ **Arquitetura MVC** bem estruturada
-- 📚 **Documentação Swagger/OpenAPI** integrada
-- ✅ **Validação automática** de disponibilidade de mesas
-- 🔒 **Segurança baseada em roles** para operações administrativas
+- **Arquitetura MVC** bem estruturada
+- **Documentação Swagger/OpenAPI** integrada
+- **Validação automática** de disponibilidade de mesas
+- **Segurança baseada em roles** para operações administrativas
 
 ---
 
-## 🛠️ Stack Tecnológica
+## Tecnologias utilizadas 
 
 <table>
 <tr>
@@ -61,53 +61,57 @@
 </tr>
 </table>
 
-### 📚 Principais Dependências
+### Principais Dependências
 - **Spring Security** - Autenticação e autorização JWT
 - **Spring Data JPA** - Persistência e ORM
 - **SpringDoc OpenAPI** - Documentação automática da API
-- **H2 Database** - Banco em memória para desenvolvimento
+- **PostgreSQL** - Banco em memória para desenvolvimento
 - **Bean Validation** - Validação de dados de entrada
 
 ---
 
-## 🚀 Quick Start
+## Como executar
 
-### 📋 Pré-requisitos
+### Pré-requisitos
 
 ```bash
 ☑️ Java 17 ou superior
 ☑️ Maven 3.6+
+☑️ PostgreSQL instalado e configurado
 ☑️ Git
 ```
 
-### 🔧 Instalação e Execução
+### Instalação e Execução
 
 ```bash
 # 1️⃣ Clone o repositório
-git clone https://github.com/CesaoW/DesafioProgramacao.git
-cd DesafioProgramacao
+git clone https://github.com/CesaoW/Gerenciamento-de-Reservas.git
+cd Gerenciamento-de-Reservas
 
-# 2️⃣ Instale as dependências
+# 2️⃣ Configure o banco PostgreSQL
+# Crie um banco de dados chamado 'reservas' no PostgreSQL
+# Configure as credenciais no application.properties
+
+# 3️⃣ Instale as dependências
 mvn clean install
 
-# 3️⃣ Execute a aplicação
+# 4️⃣ Execute a aplicação
 mvn spring-boot:run
 ```
 
-### 🌐 Acessos
+### Acessos
 
 | Serviço | URL | Descrição |
 |---------|-----|-----------|
 | **API Base** | `http://localhost:8080` | Servidor principal |
 | **Swagger UI** | `http://localhost:8080/swagger-ui.html` | Interface de documentação |
 | **API Docs** | `http://localhost:8080/v3/api-docs` | Especificação OpenAPI |
-| **H2 Console** | `http://localhost:8080/h2-console` | Console do banco H2 |
 
 ---
 
-## 📋 Exemplos de Uso
+## Exemplos de Uso
 
-### 🔐 Autenticação
+### Gerenciamento de Usuários
 
 ```bash
 # Login para obter token JWT
@@ -119,12 +123,11 @@ curl -X POST http://localhost:8080/user/login \
   }'
 ```
 
-### 📅 Gerenciamento de Reservas
+### Gerenciamento de Reservas
 
 ```bash
-# ✅ Criar nova reserva
+# Criar nova reserva
 curl -X POST http://localhost:8080/reservas \
-  -H "Authorization: Bearer {seu-jwt-token}" \
   -H "Content-Type: application/json" \
   -d '{
     "userName": "João Silva",
@@ -133,28 +136,26 @@ curl -X POST http://localhost:8080/reservas \
     "reservationType": "SIMPLE"
   }'
 
-# 📋 Listar todas as reservas
+# Listar todas as reservas
 curl -X GET http://localhost:8080/reservas \
-  -H "Authorization: Bearer {seu-jwt-token}"
 
-# ❌ Cancelar reserva
+# Cancelar reserva
 curl -X PATCH http://localhost:8080/reservas/cancel \
-  -H "Authorization: Bearer {seu-jwt-token}" \
   -H "Content-Type: application/json" \
   -d '{
     "userName": "João Silva",
     "dateTime": "2024-08-15T19:30:00"
   }'
 
-# 🗑️ Deletar reserva (remove permanentemente)
+# Deletar reserva (remove permanentemente)
 curl -X DELETE http://localhost:8080/reservas/João Silva \
   -H "Authorization: Bearer {seu-jwt-token}"
 ```
 
-### 🪑 Gerenciamento de Mesas (Apenas Administradores)
+### Gerenciamento de Mesas (Apenas Administradores)
 
 ```bash
-# ➕ Criar nova mesa
+# Criar nova mesa
 curl -X POST http://localhost:8080/mesas \
   -H "Authorization: Bearer {admin-jwt-token}" \
   -H "Content-Type: application/json" \
@@ -167,36 +168,40 @@ curl -X POST http://localhost:8080/mesas \
 
 ---
 
-## 🏗️ Arquitetura do Projeto
+## Arquitetura do Projeto
 
 ```
 src/main/java/
-├── 🎮 controller/           # Endpoints REST
+├── controller/           # Endpoints REST
 │   ├── ReservationController
 │   ├── MesaController
-│   └── AuthController
-├── ⚙️ service/             # Lógica de negócio
-│   ├── ReservationService
-│   ├── MesaService
-│   └── AuthService
-├── 🗄️ repository/          # Acesso aos dados
-│   ├── ReservationRepository
-│   ├── RestTableRepository
-│   └── UserRepository
-├── 📊 model/               # Entidades JPA
+│   └── UserController
+├── dto/                 # Data Transfer Objects
+│   │   ├── ReservationDTO
+│   │   ├── RestTableDTO
+│   │   └── UserDTO
+├── model/               # Entidades JPA
 │   ├── Reservation
 │   ├── RestaurantTable
 │   └── User
-├── 📦 dto/                 # Data Transfer Objects
-├── ⚙️ config/             # Configurações
-│   ├── SecurityConfig
-│   └── OpenApiConfig
-└── 🚨 exception/          # Tratamento de exceções
+├── repository/          # Acesso aos dados
+│   ├── ReservationRepository
+│   ├── RestTableRepository
+│   └── UserRepository
+├── security/            # Configurações de Segurança
+│   │   ├── JwtRequestFilter
+│   │   ├── JwtUtil
+│   │   └── SecurityConfig
+├── service/             # Lógica de negócio
+│   ├── ReservationService
+│   ├── MesaService
+│   └── UserService
+└──       
 ```
 
 ---
 
-## 📊 Modelo de Dados
+## Modelo de Dados
 
 ```mermaid
 erDiagram
@@ -230,28 +235,28 @@ erDiagram
 
 ---
 
-## 🔒 Sistema de Autenticação
+## Sistema de Autenticação
 
-### 👥 Roles Disponíveis
+### Roles Disponíveis
 
 | Role | Permissões |
 |------|------------|
 | **ADMINISTRADOR** | ✅ Todas as operações em mesas e reservas |
 | **CLIENTE** | ✅ Criar e gerenciar suas próprias reservas |
 
-### 🛡️ Endpoints Protegidos
+### Endpoints Protegidos
 
-- 🔒 `POST /mesas` - Apenas ADMINISTRADOR
-- 🔒 `PATCH /mesas` - Apenas ADMINISTRADOR
-- 🔒 `DELETE /mesas` - Apenas ADMINISTRADOR
-- 🔒 `DELETE /reservas/{userName}` - Autenticação obrigatória
-- 🔒 `PATCH /reservas/cancel` - Autenticação obrigatória
-
----
+- `POST /mesas` - Apenas ADMINISTRADOR
+- `PATCH /mesas` - Apenas ADMINISTRADOR
+- `DELETE /mesas` - Apenas ADMINISTRADOR
+- `DELETE /reservas/{userName}` - Autenticação obrigatória
+- `PATCH /reservas/cancel` - Autenticação obrigatória
 
 ---
 
-## 👨‍💻 Desenvolvedor
+---
+
+## Desenvolvedor
 
 <div align="center">
 
