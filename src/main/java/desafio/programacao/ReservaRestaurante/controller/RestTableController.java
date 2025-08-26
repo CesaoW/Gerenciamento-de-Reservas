@@ -3,6 +3,8 @@ package desafio.programacao.ReservaRestaurante.controller;
 
 import desafio.programacao.ReservaRestaurante.dto.RestTableDTO.*;
 import desafio.programacao.ReservaRestaurante.service.RestTableService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/mesas")
+@Tag(name = "Mesas", description = "Gerenciador de Mesas")
 public class RestTableController {
     private final RestTableService tableService;
 
@@ -20,6 +23,7 @@ public class RestTableController {
     }
 
     @PostMapping()
+    @Operation(summary = "Cadastro de mesas", description = "Cadastra uma nova mesa na base dados, apenas administradores podem criar novas mesas")
     public ResponseEntity<?> registerTable(@RequestBody RestTableRegisterDTO tableRegisterDTO){
         try{
             RestTableResponseDTO newTable = tableService.registerTable(tableRegisterDTO);
@@ -30,12 +34,14 @@ public class RestTableController {
     }
 
     @GetMapping()
+    @Operation(summary = "Lista de mesas", description = "Retorna uma lista com todas as mesas exitentes na base de dados")
     public ResponseEntity<java.util.List<RestTableResponseDTO>> getAllTables() {
         List<RestTableResponseDTO> allTables = tableService.getAllTables();
         return ResponseEntity.ok(allTables);
     }
 
     @PatchMapping("/{id}")
+    @Operation(summary = "Altera dados de mesas", description = "Apenas administradores podem alterar dados de mesas pelo seu ID")
     public ResponseEntity<RestTableResponseDTO> updateTable(@PathVariable Long id, @RequestBody RestTableUpdateDTO tableUpdateDTO){
         try{
             RestTableResponseDTO toUpdate = tableService.updateTable(id, tableUpdateDTO);
@@ -46,6 +52,7 @@ public class RestTableController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Exclusão de uma mesas", description = "Apenas administradores podem excluir mesas da base de dados pelo seu ID")
     public ResponseEntity<Void> deleteByID(@PathVariable Long id){
         tableService.deleteTable(id);
         return ResponseEntity.noContent().build();

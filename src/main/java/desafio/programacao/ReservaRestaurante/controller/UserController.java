@@ -5,6 +5,8 @@ import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserRegisterDTO;
 import desafio.programacao.ReservaRestaurante.dto.UserDTO.UserResponseDTO;
 import desafio.programacao.ReservaRestaurante.security.JwtUtil;
 import desafio.programacao.ReservaRestaurante.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "Usuários", description = "Gerenciador de Usuários")
 public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
@@ -28,6 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/registro")
+    @Operation(summary = "Cadastra usuário", description = "Cadastra um novo usuário na base de dados")
     public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRegisterDTO registerDTO) {
         try {
             UserResponseDTO newUser = userService.registerUser(registerDTO);
@@ -41,6 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Login de usuário", description = "Verifica os dados do usuário, retornando o token para uso futuro")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO loginDTO) {
         Optional<UserResponseDTO> userOptional = userService.authenticate(loginDTO.getEmail(), loginDTO.getPassword());
 
