@@ -4,6 +4,7 @@ import desafio.programacao.ReservaRestaurante.dto.ReservationDTO.*;
 import desafio.programacao.ReservaRestaurante.model.Reservation;
 import desafio.programacao.ReservaRestaurante.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,7 @@ public class ReservationController {
 
     @DeleteMapping("/{name}")
     @Operation(summary = "Exclusão de uma reserva", description = "Apenas administradores conseguem apagar da base de dados uma reserva ativa")
+    @SecurityRequirement(name= "bearer-key")
     public ResponseEntity<String> deleteByName(@PathVariable String name){
         try{
             reservationService.deleteReservationByName(name);

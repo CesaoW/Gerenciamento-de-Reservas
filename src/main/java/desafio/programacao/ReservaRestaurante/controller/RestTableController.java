@@ -4,6 +4,7 @@ package desafio.programacao.ReservaRestaurante.controller;
 import desafio.programacao.ReservaRestaurante.dto.RestTableDTO.*;
 import desafio.programacao.ReservaRestaurante.service.RestTableService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class RestTableController {
 
     @PostMapping()
     @Operation(summary = "Cadastro de mesas", description = "Cadastra uma nova mesa na base dados, apenas administradores podem criar novas mesas")
+    @SecurityRequirement(name= "bearer-key")
     public ResponseEntity<?> registerTable(@RequestBody RestTableRegisterDTO tableRegisterDTO){
         try{
             RestTableResponseDTO newTable = tableService.registerTable(tableRegisterDTO);
@@ -42,7 +44,8 @@ public class RestTableController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Altera dados de mesas", description = "Apenas administradores podem alterar dados de mesas pelo seu ID")
-    public ResponseEntity<RestTableResponseDTO> updateTable(@PathVariable Long id, @RequestBody RestTableUpdateDTO tableUpdateDTO){
+    @SecurityRequirement(name= "bearer-key")
+     ResponseEntity<RestTableResponseDTO> updateTable(@PathVariable Long id, @RequestBody RestTableUpdateDTO tableUpdateDTO){
         try{
             RestTableResponseDTO toUpdate = tableService.updateTable(id, tableUpdateDTO);
             return ResponseEntity.ok(toUpdate);
@@ -53,6 +56,7 @@ public class RestTableController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Exclusão de uma mesas", description = "Apenas administradores podem excluir mesas da base de dados pelo seu ID")
+    @SecurityRequirement(name= "bearer-key")
     public ResponseEntity<Void> deleteByID(@PathVariable Long id){
         tableService.deleteTable(id);
         return ResponseEntity.noContent().build();
